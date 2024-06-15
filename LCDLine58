@@ -1,1 +1,10 @@
+#include <M5Stack.h>
 
+void setup() {
+  M5.begin(); //M5stackオブジェクトを初期化する
+  M5.Lcd.drawLine(0,0,319,239,WHITE); // LCDに線を書く
+}
+
+void loop() {
+
+}
