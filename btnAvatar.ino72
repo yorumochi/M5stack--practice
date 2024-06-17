@@ -1,0 +1,82 @@
+#include <M5Unified.h>
+#include <Avatar.h> //アバターライブラリを使うときは Avatar.hをインクルードする
+
+using namespace m5avatar;
+
+Avatar avatar; //Avatarクラスの変数(オブジェクト)を定義
+
+void setup() {
+  M5.begin();
+
+  avatar.init(); //オブジェクトを初期化する
+}
+
+void loop(){
+  M5.update(); //ボタンを使うときは、定期的にupdate()を呼ぶ
+  if (M5.BtnA.wasPressed()){                    //ボタンAが押されていたら
+    avatar.setExpression(Expression::Neutral);  //アバターの表情を「普通」にする
+  }
+    if (M5.BtnB.wasPressed()){                  //ボタンBが押されていたら
+    avatar.setExpression(Expression::Happy);    //アバターの表情を「幸せ」にする
+  }
+    if (M5.BtnB.wasPressedFor(1000)){           //ボタンBが1秒以上長押しされていたら
+    avatar.setExpression(Expression::Neutral);  //アバターの表情を「普通」にする
+  }
+      if (M5.BtnC.wasPressed()){                //ボタンCが押されていたら
+    avatar.setExpression(Expression::Angry);    //アバターの表情を「怒り」にする
+  }
+      if (M5.BtnC.wasPressedFor(1000)){         //ボタンCが1秒以上長押しされていたら
+    avatar.setExpression(Expression::Neutral);  //アバターの表情を「普通」にする
+  }
+}
+
+//修正版を下記にて
+
+#include <M5Unified.h>
+#include <Avatar.h> //アバターライブラリを使うときは Avatar.hをインクルードする
+
+using namespace m5avatar;
+
+Avatar avatar; //Avatarクラスの変数(オブジェクト)を定義
+
+unsigned long BtnBPressTime = 0; //ボタンBが押された時間を記録する変数
+unsigned long BtnCPressTime = 0; //ボタンCが押された時間を記録する変数
+
+void setup() {
+  M5.begin();
+  avatar.init(); //オブジェクトを初期化する
+}
+
+void loop() {
+  M5.update(); //ボタンを使うときは、定期的にupdate()を呼ぶ
+
+  if (M5.BtnA.wasPressed()) {                    //ボタンAが押されていたら
+    avatar.setExpression(Expression::Neutral);   //アバターの表情を「普通」にする
+  }
+
+  if (M5.BtnB.isPressed()) {                     //ボタンBが押されたとき
+    if (BtnBPressTime == 0) {                    //押された瞬間を記録
+      BtnBPressTime = millis();
+    } else if (millis() - BtnBPressTime >= 1000) { //1秒以上押されていたら
+      avatar.setExpression(Expression::Neutral); //アバターの表情を「普通」にする
+    }
+  } else if (M5.BtnB.wasReleased()) {            //ボタンBが放されたら
+    if (millis() - BtnBPressTime < 1000) {       //1秒未満の押し
+      avatar.setExpression(Expression::Happy);   //アバターの表情を「幸せ」にする
+    }
+    BtnBPressTime = 0;                           //押された時間をリセット
+  }
+
+  if (M5.BtnC.isPressed()) {                     //ボタンCが押されたとき
+    if (BtnCPressTime == 0) {                    //押された瞬間を記録
+      BtnCPressTime = millis();
+    } else if (millis() - BtnCPressTime >= 1000) { //1秒以上押されていたら
+      avatar.setExpression(Expression::Neutral); //アバターの表情を「普通」にする
+    }
+  } else if (M5.BtnC.wasReleased()) {            //ボタンCが放されたら
+    if (millis() - BtnCPressTime < 1000) {       //1秒未満の押し
+      avatar.setExpression(Expression::Angry);   //アバターの表情を「怒り」にする
+    }
+    BtnCPressTime = 0;                           //押された時間をリセット
+  }
+}
