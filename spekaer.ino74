@@ -1,0 +1,18 @@
+#include <M5Stack.h>
+
+void setup() {
+  M5.begin();
+}
+
+void loop() {
+  M5.update(); //ボタンを使うときは、定期的にupdate()を呼ぶ
+  if (M5.BtnA.wasPressed()){       //ボタンAが押されていたら
+    M5.Speaker.tone(262,200);      //ドの音を0.2秒鳴らす
+  }
+  if (M5.BtnB.wasPressed()){       //ボタンBが押されていたら
+    M5.Speaker.tone(330,200);      //ミの音を0.2秒鳴らす
+  }
+  if (M5.BtnC.wasPressed()){       //ボタンCが押されていたら
+    M5.Speaker.tone(392,200);      //ソの音を0.2秒鳴らす
+  }
+}
